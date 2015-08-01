@@ -36,7 +36,7 @@ public class UserServicesImp implements OperationDAOServices {
 	public boolean doUpdata(Object o) {
 		return userdaoimp.doUpdata(o);
 	}
-	public boolean doLogin(User user){
+	public String doLogin(User user){
 		return userdaoimp.doLogin(user);
 	}
 

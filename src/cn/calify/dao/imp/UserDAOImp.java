@@ -48,11 +48,12 @@ public class UserDAOImp implements OperationDAO {
 	public boolean doAddByBean(Object o) {
 		boolean result = false;
 		User user = (User) o;
-		sql = "INSERT INTO `user` (`username`, `password`) VALUES (?,?)";
+		sql = "INSERT INTO `user` (`username`, `password`, `role`) VALUES (?,?,?)";
 		try{
 			pstmt = (PreparedStatement) conn.prepareStatement(sql);
 			pstmt.setString(1, user.getUsername());
 			pstmt.setString(2, user.getPassword());
+			pstmt.setString(3, user.getRole());
 			if(pstmt.executeUpdate() > 0){
 				result = true;
 			}
@@ -94,6 +95,7 @@ public class UserDAOImp implements OperationDAO {
 					user.setId(rs.getInt(1));
 					user.setUsername(rs.getString(2));
 					user.setPassword(rs.getString(3));
+					user.setRole(rs.getString(4));
 					list.add(user);
 				}
 			}catch(Exception e){
@@ -116,6 +118,7 @@ public class UserDAOImp implements OperationDAO {
 					user.setId(rs.getInt(1));
 					user.setUsername(rs.getString(2));
 					user.setPassword(rs.getString(3));
+					user.setRole(rs.getString(4));
 				}
 			}catch(Exception e){
 				e.printStackTrace();
@@ -128,15 +131,16 @@ public class UserDAOImp implements OperationDAO {
 	//通过接收指定名字来查找用户
 	public User doQueryByName(String name) {
 		User user = new User();
-		sql = "SELECT * FROM `user` WHERE (`name`=?)";
+		sql = "SELECT * FROM `user` WHERE (`username` like ?)";
 		 try{
 				pstmt = (PreparedStatement) conn.prepareStatement(sql);
-				pstmt.setString(1, name);
+				pstmt.setString(1,"%" + name + "%");
 				rs = pstmt.executeQuery();
 				while(rs.next()){
 					user.setId(rs.getInt(1));
 					user.setUsername(rs.getString(2));
 					user.setPassword(rs.getString(3));
+					user.setRole(rs.getString(4));
 				}
 			}catch(Exception e){
 				e.printStackTrace();
@@ -150,12 +154,13 @@ public class UserDAOImp implements OperationDAO {
 	public boolean doUpdata(Object o){
 		User user =(User) o;
 		boolean result = false;
-		sql = "UPDATE `user` SET `username`=?, `password`=? WHERE (`id`=?)";
+		sql = "UPDATE `user` SET `username`=?, `password`=?, `role`=? WHERE (`id`=?)";
 		 try{
 				pstmt = (PreparedStatement) conn.prepareStatement(sql);
 				pstmt.setString(1, user.getUsername());
 				pstmt.setString(2, user.getPassword());
-				pstmt.setInt(3, user.getId());
+				pstmt.setString(3, user.getRole());
+				pstmt.setInt(4, user.getId());
 				if(pstmt.executeUpdate() > 0){
 					result = true;
 				}
@@ -168,8 +173,8 @@ public class UserDAOImp implements OperationDAO {
 	}
 	
 	//新增方法：校验登录信息
-	public boolean doLogin(User user) {
-		boolean result = false;
+	public String doLogin(User user) {
+		String role = null;
 		sql = "SELECT * FROM `user` WHERE (`username`=? and `password`=?)";
 		try{
 			pstmt = (PreparedStatement) conn.prepareStatement(sql);
@@ -177,14 +182,14 @@ public class UserDAOImp implements OperationDAO {
 			pstmt.setString(2, user.getPassword());
 			rs = pstmt.executeQuery();
 			if(rs.next()){
-				result = true;
+				role = rs.getString(4);
 			}
 		}catch(Exception e){
 			e.printStackTrace();
 		}finally{
 			this.doClose();
 		}
-		return result;
+		return role;
 	}
 	
 }

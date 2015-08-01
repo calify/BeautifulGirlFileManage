@@ -27,15 +27,28 @@ public class LoginFilter implements Filter {
 		HttpSession session = servletRequest.getSession();
 		
 		String path = servletRequest.getRequestURI();
-		String isPass= (String) session.getAttribute("pass");
+		String role= (String) session.getAttribute("role");
+		
+		String localpath = servletRequest.getContextPath();
+		String basePath = servletRequest.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+localpath+"/";
 		
 		if(path.indexOf("/login.jsp") > -1){
 			chain.doFilter(servletRequest, servletResponse);
 			return;
 		}
 		
-		if(isPass == null || !isPass.equals("ok")){
-			servletResponse.sendRedirect("/BeatifulGirlFileManage/admin/login.jsp");
+		else if(path.indexOf("/userManager.jsp") > -1){
+			if(!role.equals("admin")){
+				servletResponse.sendRedirect("adminIndex.jsp");
+			}
+			else{
+				chain.doFilter(servletRequest, servletResponse);
+				return;
+			}
+		}
+		
+		if(role == null){
+			servletResponse.sendRedirect(basePath+"admin/login.jsp");
 		}
 		else{
 			chain.doFilter(request, response);

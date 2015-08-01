@@ -61,10 +61,12 @@ public class Action extends HttpServlet {
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-			if(userservicesimp.doLogin(user)){
-				//新建session
-				HttpSession hs = request.getSession();
-				hs.setAttribute("pass","ok");
+			
+			//新建session
+			HttpSession hs = request.getSession();
+			hs.setAttribute("role",userservicesimp.doLogin(user));
+			
+			if(hs != null){
 				returnjson.setResult("success");
 			}
 		}
@@ -86,6 +88,16 @@ public class Action extends HttpServlet {
 			}
 		}
 		
+		else if(action.equals("showAUser")){
+			int id = Integer.parseInt(request.getParameter("id"));
+			UserServicesImp userservicesimp = UserServicesImpFactor.generaterUserServicesImp();
+			User user = (User) userservicesimp.doQueryById(id);
+			if(user != null){
+				returnjson.setObj(user);
+				returnjson.setResult("success");
+			}
+		}
+		
 		else if(action.equals("showDetail")){
 			int id = Integer.parseInt(request.getParameter("id"));
 			BeautyServicesImp beautyservicesimp = BeautyServicesImpFactory.generaterBeautyServicesImp();
@@ -98,7 +110,7 @@ public class Action extends HttpServlet {
 		else if(action.equals("logout")){
 			HttpSession session = request.getSession();
 			session.invalidate();
-			response.sendRedirect("/BeatifulGirlFileManage/index.jsp");
+			response.sendRedirect("girl.jsp");
 		}
 
 		response.getWriter().write(JSONObject.fromObject(returnjson).toString());

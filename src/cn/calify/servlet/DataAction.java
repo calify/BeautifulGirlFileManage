@@ -10,7 +10,9 @@ import javax.servlet.http.HttpServletResponse;
 import net.sf.json.JSONObject;
 import cn.calify.beans.Beauty;
 import cn.calify.beans.TemplateJson;
+import cn.calify.beans.User;
 import cn.calify.dao.factory.BeautyDAOImpFactory;
+import cn.calify.services.factory.BeautyServicesImpFactory;
 import cn.calify.services.factory.UserServicesImpFactor;
 import cn.calify.util.GetJsonStringFromRequest;
 
@@ -55,12 +57,20 @@ public class DataAction extends HttpServlet {
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
-				Beauty beauty = (Beauty)BeautyDAOImpFactory.generaterBeautyDAOImp().doQueryByName((String)jsondata.get("name"));
+				Beauty beauty = (Beauty)BeautyServicesImpFactory.generaterBeautyServicesImp().doQueryByName((String)jsondata.get("name"));
 				returnjson.setObj(beauty);
 				returnjson.setResult("success");
 			}
 			else if(role.equals("user")){
-				
+				JSONObject jsondata = null;
+				try {
+					jsondata = JSONObject.fromObject(GetJsonStringFromRequest.getJsonString(request));
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+				User user = (User)UserServicesImpFactor.generaterUserServicesImp().doQueryByName((String)jsondata.getString("username"));
+				returnjson.setObj(user);
+				returnjson.setResult("success");
 			}
 		}
 		else if(action.equals("add")){
@@ -72,12 +82,21 @@ public class DataAction extends HttpServlet {
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
-				if(BeautyDAOImpFactory.generaterBeautyDAOImp().doAddByBean(beauty)){
+				if(BeautyServicesImpFactory.generaterBeautyServicesImp().doAddByBean(beauty)){
 					returnjson.setResult("success");
 				}
 			}
 			else if(role.equals("user")){
-				
+				JSONObject jsondata = null;
+				User user = null;
+				try {
+					user =(User) JSONObject.toBean(JSONObject.fromObject(GetJsonStringFromRequest.getJsonString(request)),User.class);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+				if(UserServicesImpFactor.generaterUserServicesImp().doAddByBean(user)){
+					returnjson.setResult("success");
+				}
 			}
 		}
 		else if(action.equals("del")){
@@ -88,7 +107,7 @@ public class DataAction extends HttpServlet {
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
-				if(BeautyDAOImpFactory.generaterBeautyDAOImp().doDelById(jsondata.getInt("id"))){
+				if(BeautyServicesImpFactory.generaterBeautyServicesImp().doDelById(jsondata.getInt("id"))){
 					returnjson.setResult("success");
 				}				
 			}
@@ -113,12 +132,21 @@ public class DataAction extends HttpServlet {
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
-				if(BeautyDAOImpFactory.generaterBeautyDAOImp().doUpdata(beauty)){
+				if(BeautyServicesImpFactory.generaterBeautyServicesImp().doUpdata(beauty)){
 					returnjson.setResult("success");
 				}
 			}
 			else if(role.equals("user")){
-				
+				JSONObject jsondata = null;
+				User user = null;
+				try {
+					user =(User) JSONObject.toBean(JSONObject.fromObject(GetJsonStringFromRequest.getJsonString(request)),User.class);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+				if(UserServicesImpFactor.generaterUserServicesImp().doUpdata(user)){
+					returnjson.setResult("success");
+				}
 			}			
 		}
 		response.getWriter().write(JSONObject.fromObject(returnjson).toString());

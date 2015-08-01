@@ -85,7 +85,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				alert("添加成功！");
 				history.go(0);
 			}
-		})
+		});
 		
 		$(".update").click(function(){
 			var durl = url + 'Action?action=showDetail&id=' + $(this).prev().prev().attr("id");
@@ -100,7 +100,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			//加载美女详细内容
 			$("#u_id").attr("value",result.obj.id);
 			$("#u_name").attr("value",result.obj.name);
-			$("#u_height").attr("value",result.obj.weight);
+			$("#u_height").attr("value",result.obj.height);
 			$("#u_weight").attr("value",result.obj.weight);
 			$("#u_age").attr("value",result.obj.age);
 			$("#u_area").attr("value",result.obj.area);
@@ -151,7 +151,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   美女年龄<input id='a_age' type='text'/><br/>
   美女地区<input id='a_area' type='text'/><br/>
   美女简介<input id='a_instruction' type='text' width="100px" height="200px"/>
- <input type="submit" id="add_new" value="提交"/>
+ <input type="submit" id="add_new" value="添加"/>
  </div>
  
    <div id='updatebeauty'>
@@ -162,7 +162,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   美女年龄<input id='u_age' type='text'/><br/>
   美女地区<input id='u_area' type='text'/><br/>
   美女简介<input id='u_instruction' type='text' width="100px" height="200px"/>
- <input type="submit" id="update_new" value="提交"/>
+ <input type="submit" id="update_new" value="确定修改"/>
   </div>
   
   </body>
