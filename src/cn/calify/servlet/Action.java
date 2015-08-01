@@ -78,6 +78,14 @@ public class Action extends HttpServlet {
 			}
 		}
 		
+		else if(action.equals("showUser")){
+			List<User> list = UserServicesImpFactor.generaterUserServicesImp().doQueryALL();
+			if(list != null){
+				returnjson.setReturnlist(list);
+				returnjson.setResult("success");
+			}
+		}
+		
 		else if(action.equals("showDetail")){
 			int id = Integer.parseInt(request.getParameter("id"));
 			BeautyServicesImp beautyservicesimp = BeautyServicesImpFactory.generaterBeautyServicesImp();
