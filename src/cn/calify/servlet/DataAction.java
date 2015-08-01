@@ -8,10 +8,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import net.sf.json.JSONObject;
-
 import cn.calify.beans.Beauty;
 import cn.calify.beans.TemplateJson;
 import cn.calify.dao.factory.BeautyDAOImpFactory;
+import cn.calify.services.factory.UserServicesImpFactor;
 import cn.calify.util.GetJsonStringFromRequest;
 
 public class DataAction extends HttpServlet {
@@ -88,12 +88,20 @@ public class DataAction extends HttpServlet {
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
-				if(BeautyDAOImpFactory.generaterBeautyDAOImp().doDelById(Integer.parseInt((String)jsondata.get("id")))){
+				if(BeautyDAOImpFactory.generaterBeautyDAOImp().doDelById(jsondata.getInt("id"))){
 					returnjson.setResult("success");
 				}				
 			}
 			else if(role.equals("user")){
-				
+				JSONObject jsondata = null;
+				try {
+					jsondata = JSONObject.fromObject(GetJsonStringFromRequest.getJsonString(request));
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+				if(UserServicesImpFactor.generaterUserServicesImp().doDelById(jsondata.getInt("id"))){
+					returnjson.setResult("success");
+				}
 			}
 		}
 		else if(action.equals("update")){
