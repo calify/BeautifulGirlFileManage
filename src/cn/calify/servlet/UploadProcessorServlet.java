@@ -93,7 +93,7 @@ public class UploadProcessorServlet extends HttpServlet {
 			item.write(new File(PATH_FOLDER, filename)); // 第三方提供的
 			
 			returnjson.setResult("success");
-			returnjson.setObj(PATH_FOLDER + "\\" + filename);
+			returnjson.setObj(filename);
 			
 			PrintWriter writer = response.getWriter();
 			

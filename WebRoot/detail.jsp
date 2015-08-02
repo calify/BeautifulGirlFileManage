@@ -30,7 +30,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		$("ul").append("<li>地区：" + result.obj.area + "</li>");
 		$("ul").append("<li>备注：" + result.obj.instruction + "</li>");
 		if(result.obj.picpath != ""){
-			$("ul").append("<img src='" + encodeURI(result.obj.picpath) + "' />");
+			$("ul").append("<img src='uploadFile/images/" +result.obj.picpath + "' />");
 		}
 	});
 	</script>
