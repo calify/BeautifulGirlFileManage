@@ -8,6 +8,7 @@ public class Beauty {
 	private int age;
 	private String area;
 	private String instruction;
+	private String picpath = null;
 	public int getId() {
 		return id;
 	}
@@ -49,5 +50,11 @@ public class Beauty {
 	}
 	public void setInstruction(String instruction) {
 		this.instruction = instruction;
+	}
+	public String getPicpath() {
+		return picpath;
+	}
+	public void setPicpath(String picpath) {
+		this.picpath = picpath;
 	}
 }

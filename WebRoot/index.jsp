@@ -9,7 +9,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   <head>
     <base href="<%=basePath%>">
     
-    <title>美女档案管理系统V2.0</title>
+    <title>美女档案管理系统V3.0</title>
     
 	<meta http-equiv="pragma" content="no-cache">
 	<meta http-equiv="cache-control" content="no-cache">
@@ -23,13 +23,13 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   </head>
   
   <body>
-    <h1>美女档案管理系统V2.0</h1>
+    <h1>美女档案管理系统V3.0</h1>
     <h2> 更新内容：</h2>
     <ul>
-    <li>增加用户管理功能</li>
-    <li>对不同用户角色的权限管理，非管理员无法进入用户管理界面</li>
-    <li>修补了一些bug</li>
-    <li>后台查找功能支持模糊查找，不过目前只能返回一个对象，下个更新版本将会修改</li>
+    <li>优化用户管理和美女管理页面的js代码，将一些常用的操作封装成<a href="js/operation.js">operation.js</a></li>
+    <li>修补了查找以后点击修改删除按钮没反应的bug</li>
+    <li>detail页面的返回首页超链接修改为返回上一页</li>
+    <li>支持图片上传功能，然而我只会用这个功能，还没弄懂原理</li>
     </ul>
     <h1>测试账号</h1>
     <p>管理员</p>

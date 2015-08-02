@@ -48,7 +48,7 @@ public class BeautyDAOImp implements OperationDAO {
 	public boolean doAddByBean(Object o) {
 		boolean result = false;
 		Beauty beauty = (Beauty) o;
-		sql = "INSERT INTO `beauty` (`name`, `height`, `weight`, `age`, `area`, `instruction`) VALUES (?,?,?,?,?,?)";
+		sql = "INSERT INTO `beauty` (`name`, `height`, `weight`, `age`, `area`, `instruction`, `picpath`) VALUES (?,?,?,?,?,?,?)";
 		try{
 			pstmt = (PreparedStatement) conn.prepareStatement(sql);
 			pstmt.setString(1, beauty.getName());
@@ -57,6 +57,7 @@ public class BeautyDAOImp implements OperationDAO {
 			pstmt.setInt(4, beauty.getAge());
 			pstmt.setString(5, beauty.getArea());
 			pstmt.setString(6, beauty.getInstruction());
+			pstmt.setString(7, beauty.getPicpath());
 			if(pstmt.executeUpdate() > 0){
 				result = true;
 			}
@@ -102,6 +103,7 @@ public class BeautyDAOImp implements OperationDAO {
 					beauty.setAge(rs.getInt(5));
 					beauty.setArea(rs.getString(6));
 					beauty.setInstruction(rs.getString(7));
+					beauty.setPicpath(rs.getString(8));
 					list.add(beauty);
 				}
 			}catch(Exception e){
@@ -128,6 +130,7 @@ public class BeautyDAOImp implements OperationDAO {
 					beauty.setAge(rs.getInt(5));
 					beauty.setArea(rs.getString(6));
 					beauty.setInstruction(rs.getString(7));
+					beauty.setPicpath(rs.getString(8));
 				}
 			}catch(Exception e){
 				e.printStackTrace();
@@ -137,15 +140,16 @@ public class BeautyDAOImp implements OperationDAO {
 		return beauty;
 	}
 	
-	//通过接收指定名字来查找美女
-	public Object doQueryByName(String name){
-		Beauty beauty = new Beauty();
+	//模糊查找
+	public List doQueryByName(String name){
+		List<Beauty> list = new ArrayList<Beauty>();
 		sql = "SELECT * FROM `beauty` WHERE (`name` like ?)";
 		 try{
 				pstmt = (PreparedStatement) conn.prepareStatement(sql);
 				pstmt.setString(1, "%" + name + "%");
 				rs = pstmt.executeQuery();
 				while(rs.next()){
+					Beauty beauty = new Beauty();
 					beauty.setId(rs.getInt(1));
 					beauty.setName(rs.getString(2));
 					beauty.setHeight(rs.getInt(3));
@@ -153,20 +157,22 @@ public class BeautyDAOImp implements OperationDAO {
 					beauty.setAge(rs.getInt(5));
 					beauty.setArea(rs.getString(6));
 					beauty.setInstruction(rs.getString(7));
+					beauty.setPicpath(rs.getString(8));
+					list.add(beauty);
 				}
 			}catch(Exception e){
 				e.printStackTrace();
 			}finally{
 				this.doClose();
 			}
-		return beauty;
+		return list;
 	}
 	
 	//通过id修改用户信息
 	public boolean doUpdata(Object o){
 		Beauty beauty =(Beauty) o;
 		boolean result = false;
-		sql = "UPDATE `beauty` SET `name`=?, `height`=?, `weight`=?, `age`=?, `area`=?, `instruction`=? WHERE (`id`=?)";
+		sql = "UPDATE `beauty` SET `name`=?, `height`=?, `weight`=?, `age`=?, `area`=?, `instruction`=?, `picpath`=? WHERE (`id`=?)";
 		 try{
 				pstmt = (PreparedStatement) conn.prepareStatement(sql);
 				pstmt.setString(1, beauty.getName());
@@ -175,7 +181,8 @@ public class BeautyDAOImp implements OperationDAO {
 				pstmt.setInt(4, beauty.getAge());
 				pstmt.setString(5, beauty.getArea());
 				pstmt.setString(6, beauty.getInstruction());
-				pstmt.setInt(7, beauty.getId());
+				pstmt.setString(7, beauty.getPicpath());
+				pstmt.setInt(8, beauty.getId());
 				if(pstmt.executeUpdate() > 0){
 					result = true;
 				}

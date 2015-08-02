@@ -29,6 +29,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		$("ul").append("<li>年龄：" + result.obj.age + "</li>");
 		$("ul").append("<li>地区：" + result.obj.area + "</li>");
 		$("ul").append("<li>备注：" + result.obj.instruction + "</li>");
+		if(result.obj.picpath != ""){
+			$("ul").append("<img src='" + encodeURI(result.obj.picpath) + "' />");
+		}
 	});
 	</script>
 	
@@ -36,8 +39,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   
   <body>
     <ul>
-    
     </ul>
-    <a href="girl.jsp">返回美女列表</a>
+    <a href="javascript:void(0)" onclick="javascript:history.back(-1)">返回</a>
   </body>
 </html>

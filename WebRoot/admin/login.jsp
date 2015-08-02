@@ -27,7 +27,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			jsondata.username=$("#user").val();
 			jsondata.password=$("#pwd").val();
 			result = postAjax(lurl,jsondata);
-			//console.log(result);
 			if(result.result == "success"){
 				window.location="admin/adminIndex.jsp";
 			}
@@ -43,7 +42,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   </head>
   
   <body>
-      <h1>登录美女档案管理系统V2.0</h1>
+      <h1>登录美女档案管理系统V3.0</h1>
   用户名<input value="" id="user" type="text"/><br/>
   密&nbsp&nbsp&nbsp码<input value="" id="pwd" type="password"/><br/>
  <input id="login" type="submit" value="登录"></input>

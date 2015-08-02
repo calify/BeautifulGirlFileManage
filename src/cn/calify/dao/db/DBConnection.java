@@ -4,7 +4,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 
 public class DBConnection {
-	String url = "jdbc:mysql://localhost:3306/beautiful";
+	String url = "jdbc:mysql://127.0.0.1:3306/beautiful";
 	String username = "root";
 	String password = "root";
 	Connection connection = null;

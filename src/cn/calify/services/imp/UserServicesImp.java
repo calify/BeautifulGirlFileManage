@@ -29,7 +29,7 @@ public class UserServicesImp implements OperationDAOServices {
 		return userdaoimp.doQueryById(id);
 	}
 
-	public Object doQueryByName(String name) {
+	public List doQueryByName(String name) {
 		return userdaoimp.doQueryByName(name);
 	}	
 	

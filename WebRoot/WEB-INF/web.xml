@@ -39,8 +39,15 @@
     <servlet-name>DataAction</servlet-name>
     <servlet-class>cn.calify.servlet.DataAction</servlet-class>
   </servlet>
-
-
+  <servlet>
+		<servlet-name>uploadProcessorServlet</servlet-name>
+		<servlet-class>cn.calify.servlet.UploadProcessorServlet</servlet-class>
+	</servlet>
+	
+	<servlet-mapping>
+		<servlet-name>uploadProcessorServlet</servlet-name>
+		<url-pattern>/upload</url-pattern>
+	</servlet-mapping>
   <servlet-mapping>
     <servlet-name>Action</servlet-name>
     <url-pattern>/Action</url-pattern>

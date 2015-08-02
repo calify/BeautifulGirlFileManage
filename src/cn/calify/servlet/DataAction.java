@@ -1,6 +1,7 @@
 package cn.calify.servlet;
 
 import java.io.IOException;
+import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -13,7 +14,7 @@ import cn.calify.beans.TemplateJson;
 import cn.calify.beans.User;
 import cn.calify.dao.factory.BeautyDAOImpFactory;
 import cn.calify.services.factory.BeautyServicesImpFactory;
-import cn.calify.services.factory.UserServicesImpFactor;
+import cn.calify.services.factory.UserServicesImpFactory;
 import cn.calify.util.GetJsonStringFromRequest;
 
 public class DataAction extends HttpServlet {
@@ -57,8 +58,8 @@ public class DataAction extends HttpServlet {
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
-				Beauty beauty = (Beauty)BeautyServicesImpFactory.generaterBeautyServicesImp().doQueryByName((String)jsondata.get("name"));
-				returnjson.setObj(beauty);
+				List<Beauty> list = BeautyServicesImpFactory.generaterBeautyServicesImp().doQueryByName((String)jsondata.getString("name"));
+				returnjson.setReturnlist(list);
 				returnjson.setResult("success");
 			}
 			else if(role.equals("user")){
@@ -68,8 +69,9 @@ public class DataAction extends HttpServlet {
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
-				User user = (User)UserServicesImpFactor.generaterUserServicesImp().doQueryByName((String)jsondata.getString("username"));
-				returnjson.setObj(user);
+				List<User> list = UserServicesImpFactory.generaterUserServicesImp().doQueryByName((String)jsondata.getString("username"));
+				//List<User> list = UserServicesImpFactory.generaterUserServicesImp().doQueryByName((String)jsondata.getString("name"));
+				returnjson.setReturnlist(list);
 				returnjson.setResult("success");
 			}
 		}
@@ -94,7 +96,7 @@ public class DataAction extends HttpServlet {
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
-				if(UserServicesImpFactor.generaterUserServicesImp().doAddByBean(user)){
+				if(UserServicesImpFactory.generaterUserServicesImp().doAddByBean(user)){
 					returnjson.setResult("success");
 				}
 			}
@@ -118,7 +120,7 @@ public class DataAction extends HttpServlet {
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
-				if(UserServicesImpFactor.generaterUserServicesImp().doDelById(jsondata.getInt("id"))){
+				if(UserServicesImpFactory.generaterUserServicesImp().doDelById(jsondata.getInt("id"))){
 					returnjson.setResult("success");
 				}
 			}
@@ -144,7 +146,7 @@ public class DataAction extends HttpServlet {
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
-				if(UserServicesImpFactor.generaterUserServicesImp().doUpdata(user)){
+				if(UserServicesImpFactory.generaterUserServicesImp().doUpdata(user)){
 					returnjson.setResult("success");
 				}
 			}			

@@ -5,6 +5,7 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
+import cn.calify.beans.Beauty;
 import cn.calify.beans.User;
 import cn.calify.dao.OperationDAO;
 import cn.calify.dao.db.DBConnection;
@@ -128,26 +129,28 @@ public class UserDAOImp implements OperationDAO {
 		return user;
 	}
 	
-	//通过接收指定名字来查找用户
-	public User doQueryByName(String name) {
-		User user = new User();
+	//模糊查找
+	public List doQueryByName(String name) {
+		List<User> list = new ArrayList<User>();
 		sql = "SELECT * FROM `user` WHERE (`username` like ?)";
 		 try{
 				pstmt = (PreparedStatement) conn.prepareStatement(sql);
 				pstmt.setString(1,"%" + name + "%");
 				rs = pstmt.executeQuery();
 				while(rs.next()){
+					User user = new User();
 					user.setId(rs.getInt(1));
 					user.setUsername(rs.getString(2));
 					user.setPassword(rs.getString(3));
 					user.setRole(rs.getString(4));
+					list.add(user);
 				}
 			}catch(Exception e){
 				e.printStackTrace();
 			}finally{
 				this.doClose();
 			}
-		return user;
+		return list;
 	}
 	
 	//通过id修改用户信息

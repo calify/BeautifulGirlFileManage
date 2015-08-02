@@ -38,8 +38,9 @@ public class LoginFilter implements Filter {
 		}
 		
 		else if(path.indexOf("/userManager.jsp") > -1){
-			if(!role.equals("admin")){
+			if( role==null || !role.equals("admin")){
 				servletResponse.sendRedirect("adminIndex.jsp");
+				return;
 			}
 			else{
 				chain.doFilter(servletRequest, servletResponse);

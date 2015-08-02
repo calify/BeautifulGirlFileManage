@@ -28,7 +28,7 @@ public class BeautyServicesImp implements OperationDAOServices {
 		return beautydaoimp.doQueryById(id);
 	}
 
-	public Object doQueryByName(String name) {
+	public List doQueryByName(String name) {
 		return beautydaoimp.doQueryByName(name);
 	}	
 	

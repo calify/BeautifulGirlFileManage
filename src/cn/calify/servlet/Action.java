@@ -14,7 +14,7 @@ import cn.calify.beans.Beauty;
 import cn.calify.beans.TemplateJson;
 import cn.calify.beans.User;
 import cn.calify.services.factory.BeautyServicesImpFactory;
-import cn.calify.services.factory.UserServicesImpFactor;
+import cn.calify.services.factory.UserServicesImpFactory;
 import cn.calify.services.imp.BeautyServicesImp;
 import cn.calify.services.imp.UserServicesImp;
 import cn.calify.util.GetJsonStringFromRequest;
@@ -53,7 +53,7 @@ public class Action extends HttpServlet {
 		returnjson.setResult("fail");
 		
 		if(action.equals("login")){
-			UserServicesImp userservicesimp = UserServicesImpFactor.generaterUserServicesImp();
+			UserServicesImp userservicesimp = UserServicesImpFactory.generaterUserServicesImp();
 			User user = null;
 			try {
 				JSONObject loginjson = JSONObject.fromObject(GetJsonStringFromRequest.getJsonString(request));
@@ -66,7 +66,7 @@ public class Action extends HttpServlet {
 			HttpSession hs = request.getSession();
 			hs.setAttribute("role",userservicesimp.doLogin(user));
 			
-			if(hs != null){
+			if(hs.getAttribute("role") != null){
 				returnjson.setResult("success");
 			}
 		}
@@ -81,7 +81,7 @@ public class Action extends HttpServlet {
 		}
 		
 		else if(action.equals("showUser")){
-			List<User> list = UserServicesImpFactor.generaterUserServicesImp().doQueryALL();
+			List<User> list = UserServicesImpFactory.generaterUserServicesImp().doQueryALL();
 			if(list != null){
 				returnjson.setReturnlist(list);
 				returnjson.setResult("success");
@@ -90,7 +90,7 @@ public class Action extends HttpServlet {
 		
 		else if(action.equals("showAUser")){
 			int id = Integer.parseInt(request.getParameter("id"));
-			UserServicesImp userservicesimp = UserServicesImpFactor.generaterUserServicesImp();
+			UserServicesImp userservicesimp = UserServicesImpFactory.generaterUserServicesImp();
 			User user = (User) userservicesimp.doQueryById(id);
 			if(user != null){
 				returnjson.setObj(user);
@@ -112,7 +112,6 @@ public class Action extends HttpServlet {
 			session.invalidate();
 			response.sendRedirect("girl.jsp");
 		}
-
 		response.getWriter().write(JSONObject.fromObject(returnjson).toString());
 	}
 
