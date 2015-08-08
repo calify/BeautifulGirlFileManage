@@ -8,7 +8,9 @@ public class Beauty {
 	private int age;
 	private String area;
 	private String instruction;
-	private String picpath = null;
+	private int support;
+	private int against;
+	private int visitnumber;
 	public int getId() {
 		return id;
 	}
@@ -51,10 +53,22 @@ public class Beauty {
 	public void setInstruction(String instruction) {
 		this.instruction = instruction;
 	}
-	public String getPicpath() {
-		return picpath;
+	public int getSupport() {
+		return support;
 	}
-	public void setPicpath(String picpath) {
-		this.picpath = picpath;
+	public void setSupport(int support) {
+		this.support = support;
+	}
+	public int getAgainst() {
+		return against;
+	}
+	public void setAgainst(int against) {
+		this.against = against;
+	}
+	public int getVisitnumber() {
+		return visitnumber;
+	}
+	public void setVisitnumber(int visitnumber) {
+		this.visitnumber = visitnumber;
 	}
 }

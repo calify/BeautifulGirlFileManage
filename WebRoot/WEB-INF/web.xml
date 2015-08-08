@@ -4,6 +4,10 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
 	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee 
 	http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
+  <context-param>
+	<param-name>photopath</param-name>
+	<param-value>/upload/photo/</param-value>
+  </context-param> 
   
   <filter>
 	<filter-name>CharsetEncodingServlet</filter-name>
@@ -13,15 +17,17 @@
     	<param-value>UTF-8</param-value>
     </init-param>
   </filter>
+  
   <filter>
     <filter-name>login</filter-name>
     <filter-class>cn.calify.filter.LoginFilter</filter-class>
-      </filter>
+  </filter>
   
-      <filter-mapping>
-          <filter-name>login</filter-name>
-          <url-pattern>/admin/*</url-pattern>
+  <filter-mapping>
+    <filter-name>login</filter-name>
+    <url-pattern>/admin/*</url-pattern>
     </filter-mapping> 
+ 
   <filter-mapping>
 	<filter-name>CharsetEncodingServlet</filter-name>
     <url-pattern>/*</url-pattern>
@@ -33,30 +39,65 @@
     <servlet-name>Action</servlet-name>
     <servlet-class>cn.calify.servlet.Action</servlet-class>
   </servlet>
+  
   <servlet>
     <description>This is the description of my J2EE component</description>
     <display-name>This is the display name of my J2EE component</display-name>
     <servlet-name>DataAction</servlet-name>
     <servlet-class>cn.calify.servlet.DataAction</servlet-class>
   </servlet>
+  
   <servlet>
-		<servlet-name>uploadProcessorServlet</servlet-name>
-		<servlet-class>cn.calify.servlet.UploadProcessorServlet</servlet-class>
-	</servlet>
+	<servlet-name>uploadProcessorServlet</servlet-name>
+	<servlet-class>cn.calify.servlet.UploadProcessorServlet</servlet-class>
+  </servlet>
+  
+  <servlet>  
+    <servlet-name>code</servlet-name>  
+    <servlet-class>cn.calify.servlet.SafeCode</servlet-class>  
+  </servlet>
+  
+  <servlet>
+    <description>This is the description of my J2EE component</description>
+    <display-name>This is the display name of my J2EE component</display-name>
+    <servlet-name>Test</servlet-name>
+    <servlet-class>cn.calify.servlet.Test</servlet-class>
+  </servlet>
+  
+  <servlet>
+  	<servlet-name>Download</servlet-name>  
+    <servlet-class>cn.calify.servlet.DownLoadPhoto</servlet-class>    
+  </servlet>
+  
+  <servlet-mapping>  
+    <servlet-name>Download</servlet-name>  
+    <url-pattern>/DownLoadPhoto</url-pattern>  
+  </servlet-mapping>
+  
+  <servlet-mapping>  
+    <servlet-name>code</servlet-name>  
+    <url-pattern>/safecode</url-pattern>  
+  </servlet-mapping>
 	
-	<servlet-mapping>
-		<servlet-name>uploadProcessorServlet</servlet-name>
-		<url-pattern>/upload</url-pattern>
-	</servlet-mapping>
+  <servlet-mapping>
+	<servlet-name>uploadProcessorServlet</servlet-name>
+	<url-pattern>/upload</url-pattern>
+  </servlet-mapping>
+  
   <servlet-mapping>
     <servlet-name>Action</servlet-name>
     <url-pattern>/Action</url-pattern>
   </servlet-mapping>
+ 
   <servlet-mapping>
     <servlet-name>DataAction</servlet-name>
     <url-pattern>/DataAction</url-pattern>
   </servlet-mapping>
-    
+  <servlet-mapping>
+    <servlet-name>Test</servlet-name>
+    <url-pattern>/Test</url-pattern>
+  </servlet-mapping>
+   
   <welcome-file-list>
     <welcome-file>index.jsp</welcome-file>
   </welcome-file-list>

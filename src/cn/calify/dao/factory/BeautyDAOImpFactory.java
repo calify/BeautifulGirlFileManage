@@ -1,6 +1,5 @@
 package cn.calify.dao.factory;
 
-import cn.calify.beans.Beauty;
 import cn.calify.dao.imp.BeautyDAOImp;
 
 public class BeautyDAOImpFactory {

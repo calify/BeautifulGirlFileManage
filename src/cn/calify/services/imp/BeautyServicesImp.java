@@ -2,6 +2,8 @@ package cn.calify.services.imp;
 
 import java.util.List;
 
+import cn.calify.beans.Page;
+import cn.calify.beans.TemplateJson;
 import cn.calify.dao.factory.BeautyDAOImpFactory;
 import cn.calify.dao.imp.BeautyDAOImp;
 import cn.calify.services.OperationDAOServices;
@@ -27,13 +29,20 @@ public class BeautyServicesImp implements OperationDAOServices {
 	public Object doQueryById(int id) {
 		return beautydaoimp.doQueryById(id);
 	}
-
-	public List doQueryByName(String name) {
-		return beautydaoimp.doQueryByName(name);
-	}	
 	
 	public boolean doUpdata(Object o) {
 		return beautydaoimp.doUpdata(o);
 	}
-
+	public boolean doSupport(int support,int id){
+		return beautydaoimp.doSupport(support, id);
+	}
+	public boolean doAgainst(int against, int id){
+		return beautydaoimp.doAgainst(against, id);
+	}
+	public boolean doVisit(int visit, int id){
+		return beautydaoimp.doVisit(visit, id);
+	}
+	public TemplateJson doQueryByBean(Object o,Page page){
+		return beautydaoimp.doQueryByBean(o, page);
+	}
 }

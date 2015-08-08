@@ -9,11 +9,9 @@
 
 function query(url,jsondata){
             result = postAjax(url,jsondata);
-            if(result.result == "success"){
                 $("#container").children().hide();
                 $("ul").empty();
                 $("ul").show();
-            }
 }
 
 /**

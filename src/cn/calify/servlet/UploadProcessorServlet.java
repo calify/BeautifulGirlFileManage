@@ -34,31 +34,28 @@ import cn.calify.beans.TemplateJson;
  */
 public class UploadProcessorServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+	// 初始化路径
 	// 保存文件的目录
-	private static String PATH_FOLDER = "/";
-	// 存放临时文件的目录
-	private static String TEMP_FOLDER = "/";
+	String PATH = null; 
+	//本地
+	//PATH = getServletContext().getInitParameter("photopath");
+	
 	//返回json数据
 	private TemplateJson returnjson = new TemplateJson();
-	
-	@Override
-	public void init(ServletConfig config) throws ServletException {
-		ServletContext servletCtx = config.getServletContext();
-		// 初始化路径
-		// 保存文件的目录
-		PATH_FOLDER = servletCtx.getRealPath("/uploadFile/images");
-		// 存放临时文件的目录,存放xxx.tmp文件的目录
-		TEMP_FOLDER = servletCtx.getRealPath("/uploadFile/uploadTemp");
-	}
 
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
 	 *      response)
 	 */
+	
+	//阿里云
+	public void init(ServletConfig config) throws ServletException {
+		ServletContext servletCtx = config.getServletContext();
+		PATH = servletCtx.getRealPath("/uploadFile/images");
+	}
+	
 	protected void doGet(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
-		request.setCharacterEncoding("utf-8"); // 设置编码
-		response.setCharacterEncoding("utf-8");
 		response.setContentType("text/html;charset=UTF-8");
 		// 获得磁盘文件条目工厂
 		DiskFileItemFactory factory = new DiskFileItemFactory();
@@ -69,7 +66,10 @@ public class UploadProcessorServlet extends HttpServlet {
 		 * 原理 它是先存到 暂时存储室，然后在真正写到 对应目录的硬盘上， 按理来说 当上传一个文件时，其实是上传了两份，第一个是以 .tem
 		 * 格式的 然后再将其真正写到 对应目录的硬盘上
 		 */
-		factory.setRepository(new File(TEMP_FOLDER));
+		
+		
+		factory.setRepository(new File(PATH));
+		
 		// 设置 缓存的大小，当上传文件的容量超过该缓存时，直接放到 暂时存储室
 		factory.setSizeThreshold(1024 * 1024);
 
@@ -86,11 +86,11 @@ public class UploadProcessorServlet extends HttpServlet {
 			// 获取文件名
 			String filename = getUploadFileName(item);
 
-			System.out.println("存放目录:" + PATH_FOLDER);
+			System.out.println("存放目录:" + PATH);
 			System.out.println("文件名:" + filename);
 
 			// 真正写到磁盘上
-			item.write(new File(PATH_FOLDER, filename)); // 第三方提供的
+			item.write(new File(PATH, filename)); // 第三方提供的
 			
 			returnjson.setResult("success");
 			returnjson.setObj(filename);

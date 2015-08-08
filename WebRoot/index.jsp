@@ -9,7 +9,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   <head>
     <base href="<%=basePath%>">
     
-    <title>美女档案管理系统V3.0</title>
+    <title>美女档案管理系统V5.0</title>
     
 	<meta http-equiv="pragma" content="no-cache">
 	<meta http-equiv="cache-control" content="no-cache">
@@ -23,13 +23,11 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   </head>
   
   <body>
-    <h1>美女档案管理系统V3.0</h1>
+    <h1>美女档案管理系统V5.0</h1>
     <h2> 更新内容：</h2>
     <ul>
-    <li>优化用户管理和美女管理页面的js代码，将一些常用的操作封装成<a href="js/operation.js">operation.js</a></li>
-    <li>修补了查找以后点击修改删除按钮没反应的bug</li>
-    <li>detail页面的返回首页超链接修改为返回上一页</li>
-    <li>支持图片上传功能，然而我只会用这个功能，还没弄懂原理</li>
+    <li>新增分页功能</li>
+    <li>新增组合查询功能</li>
     </ul>
     <h1>测试账号</h1>
     <p>管理员</p>

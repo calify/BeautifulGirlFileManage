@@ -10,10 +10,12 @@ import javax.servlet.http.HttpServletResponse;
 
 import net.sf.json.JSONObject;
 import cn.calify.beans.Beauty;
+import cn.calify.beans.Bpic;
+import cn.calify.beans.Page;
 import cn.calify.beans.TemplateJson;
 import cn.calify.beans.User;
-import cn.calify.dao.factory.BeautyDAOImpFactory;
 import cn.calify.services.factory.BeautyServicesImpFactory;
+import cn.calify.services.factory.BpicServicesImpFactory;
 import cn.calify.services.factory.UserServicesImpFactory;
 import cn.calify.util.GetJsonStringFromRequest;
 
@@ -50,34 +52,27 @@ public class DataAction extends HttpServlet {
 		String role = request.getParameter("role");
 		TemplateJson returnjson = new TemplateJson();
 		returnjson.setResult("fail");
+	
+		//查找
 		if(action.equals("query")){
-			if(role.equals("beauty")){
+			if(role.equals("bpic")){
 				JSONObject jsondata = null;
 				try {
 					jsondata = JSONObject.fromObject(GetJsonStringFromRequest.getJsonString(request));
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
-				List<Beauty> list = BeautyServicesImpFactory.generaterBeautyServicesImp().doQueryByName((String)jsondata.getString("name"));
-				returnjson.setReturnlist(list);
-				returnjson.setResult("success");
-			}
-			else if(role.equals("user")){
-				JSONObject jsondata = null;
-				try {
-					jsondata = JSONObject.fromObject(GetJsonStringFromRequest.getJsonString(request));
-				} catch (Exception e) {
-					e.printStackTrace();
+				List<Bpic> list = BpicServicesImpFactory.generaterBpicServicesImp().doQueryBybid(jsondata.getInt("id"));
+				if(list.size() > 0){
+					returnjson.setReturnlist(list);
+					returnjson.setResult("success");					
 				}
-				List<User> list = UserServicesImpFactory.generaterUserServicesImp().doQueryByName((String)jsondata.getString("username"));
-				//List<User> list = UserServicesImpFactory.generaterUserServicesImp().doQueryByName((String)jsondata.getString("name"));
-				returnjson.setReturnlist(list);
-				returnjson.setResult("success");
 			}
 		}
+		
+		//添加
 		else if(action.equals("add")){
 			if(role.equals("beauty")){
-				JSONObject jsondata = null;
 				Beauty beauty = null;
 				try {
 					beauty =(Beauty) JSONObject.toBean(JSONObject.fromObject(GetJsonStringFromRequest.getJsonString(request)),Beauty.class);
@@ -89,7 +84,6 @@ public class DataAction extends HttpServlet {
 				}
 			}
 			else if(role.equals("user")){
-				JSONObject jsondata = null;
 				User user = null;
 				try {
 					user =(User) JSONObject.toBean(JSONObject.fromObject(GetJsonStringFromRequest.getJsonString(request)),User.class);
@@ -100,7 +94,20 @@ public class DataAction extends HttpServlet {
 					returnjson.setResult("success");
 				}
 			}
+			else if(role.equals("bpic")){
+				Bpic bpic = null;
+				try {
+					bpic =(Bpic) JSONObject.toBean(JSONObject.fromObject(GetJsonStringFromRequest.getJsonString(request)),Bpic.class);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+				if(BpicServicesImpFactory.generaterBpicServicesImp().doAddByBean(bpic)){
+					returnjson.setResult("success");
+				}
+			}
 		}
+		
+		//删除
 		else if(action.equals("del")){
 			if(role.equals("beauty")){
 				JSONObject jsondata = null;
@@ -124,7 +131,21 @@ public class DataAction extends HttpServlet {
 					returnjson.setResult("success");
 				}
 			}
+			else if(role.equals("bpic")){
+				JSONObject jsondata = null;
+				try {
+					jsondata = JSONObject.fromObject(GetJsonStringFromRequest.getJsonString(request));
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+				if(BpicServicesImpFactory.generaterBpicServicesImp().doDelById(jsondata.getInt("id"))){
+					returnjson.setResult("success");
+				}
+			}
 		}
+		
+		
+		//修改
 		else if(action.equals("update")){
 			if(role.equals("beauty")){
 				JSONObject jsondata = null;
@@ -151,6 +172,44 @@ public class DataAction extends HttpServlet {
 				}
 			}			
 		}
+		else if(action.equals("support")){
+			JSONObject jsondata = null;
+			try {
+				jsondata = JSONObject.fromObject(GetJsonStringFromRequest.getJsonString(request));
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			if(BeautyServicesImpFactory.generaterBeautyServicesImp().doSupport(jsondata.getInt("support"), jsondata.getInt("id"))){
+				returnjson.setResult("success");
+			}
+			
+		}
+		else if(action.equals("against")){
+			JSONObject jsondata = null;
+			try {
+				jsondata = JSONObject.fromObject(GetJsonStringFromRequest.getJsonString(request));
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			if(BeautyServicesImpFactory.generaterBeautyServicesImp().doAgainst(jsondata.getInt("against"), jsondata.getInt("id"))){
+				returnjson.setResult("success");
+			}
+			
+		}
+		//组合查询
+		else if(action.equals("showByBean")){
+			JSONObject jsondata = null;
+			Beauty beauty = null;
+			Page page = null;
+			try {
+				jsondata = JSONObject.fromObject(GetJsonStringFromRequest.getJsonString(request));
+				beauty = (Beauty)JSONObject.toBean(JSONObject.fromObject(jsondata.getJSONObject("beauty")),Beauty.class);
+				page = (Page)JSONObject.toBean(JSONObject.fromObject(jsondata.getJSONObject("page")),Page.class);
+				returnjson = BeautyServicesImpFactory.generaterBeautyServicesImp().doQueryByBean(beauty, page);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}	
 		response.getWriter().write(JSONObject.fromObject(returnjson).toString());
 	}
 

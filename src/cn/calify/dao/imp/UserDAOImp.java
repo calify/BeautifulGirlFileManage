@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cn.calify.beans.Beauty;
+import cn.calify.beans.Page;
+import cn.calify.beans.TemplateJson;
 import cn.calify.beans.User;
 import cn.calify.dao.OperationDAO;
 import cn.calify.dao.db.DBConnection;
@@ -129,30 +131,6 @@ public class UserDAOImp implements OperationDAO {
 		return user;
 	}
 	
-	//模糊查找
-	public List doQueryByName(String name) {
-		List<User> list = new ArrayList<User>();
-		sql = "SELECT * FROM `user` WHERE (`username` like ?)";
-		 try{
-				pstmt = (PreparedStatement) conn.prepareStatement(sql);
-				pstmt.setString(1,"%" + name + "%");
-				rs = pstmt.executeQuery();
-				while(rs.next()){
-					User user = new User();
-					user.setId(rs.getInt(1));
-					user.setUsername(rs.getString(2));
-					user.setPassword(rs.getString(3));
-					user.setRole(rs.getString(4));
-					list.add(user);
-				}
-			}catch(Exception e){
-				e.printStackTrace();
-			}finally{
-				this.doClose();
-			}
-		return list;
-	}
-	
 	//通过id修改用户信息
 	public boolean doUpdata(Object o){
 		User user =(User) o;
@@ -195,4 +173,17 @@ public class UserDAOImp implements OperationDAO {
 		return role;
 	}
 	
+	//组合查询+分页
+	public TemplateJson doQueryByBean(Object o,Page page){
+		TemplateJson list =  new TemplateJson();
+		Beauty beauty = (Beauty) o;
+		try{
+			
+		}catch(Exception e){
+			e.printStackTrace();
+			}finally{
+			this.doClose();
+			}
+		return list;
+	}
 }

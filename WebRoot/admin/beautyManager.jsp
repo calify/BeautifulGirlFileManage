@@ -24,13 +24,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	<script type="text/javascript" src="js/ajaxfileupload.js"></script>
 	
 	<script type="text/javascript">
-	function ajaxFileUpload() {
-		$("#loading").ajaxStart(function() {
-			$(this).show();
-		}).ajaxComplete(function() {
-			$(this).hide();
-		});
-
+	function ajaxFileUpload(bid) {
 		$.ajaxFileUpload({
 			url : 'upload',
 			secureuri : false,
@@ -38,11 +32,14 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			dataType : 'json',
 			data : {username : $("#username").val()},
 			success : function(data, status) {
-				picpath = data.obj;
-				console.log(data);
-				if(data.result == "success"){
-					alert("上传成功！");
-				}
+				jsondata = {};
+				jsondata.path = data.obj;
+				jsondata.bid = bid;
+				jsondata.name = $("#picname").val();
+				jsondata.description = $("#picdes").val();
+				result = postAjax(url + "DataAction?action=add&role=bpic", jsondata);
+				alert("添加成功！");
+				history.go(0);
 			},
 			error : function(data, status, e) {
 				alert('上传出错');
@@ -56,7 +53,16 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 
 	<script>
 	
-	url = "<%=basePath%>" ;
+	url = "<%=basePath%>";
+	var pagenow;
+	if(<%=request.getParameter("pagenow")%> != null){
+		pagenow = <%=request.getParameter("pagenow")%>;
+	}
+	else{
+		pagenow = 1;
+	}
+	presult = postAjaxNoData(url + "Action?action=getPageCount");
+	var pagecount = presult.obj;
 	
 	//获取用户输入数据
 	function getInfo(){
@@ -68,7 +74,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		jsondata.age = $("#age").val();
 		jsondata.area = $("#area").val();
 		jsondata.instruction = $("#instruction").val();
-		jsondata.picpath = picpath;
 		return jsondata;		
 	}
 	
@@ -90,13 +95,16 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		$("#instruction").attr("value",result.obj.instruction);
 	}
 	
-	function queryBeauty(){
-		var json = {};
-		json.name = $("#beauty_name").val()
-		query(url + "DataAction?action=query&role=beauty",json);
-		$.each(result.returnlist,function(i,n){
-		$("ul").append("<li id='" + n.id + "'>" + n.name + "<a class='update' onclick='showUpdate(this)' href='javascript:void(0)'>修改</a>&nbsp<a onclick='delBeauty(this)' class='del' href='javascript:void(0)' >删除</a></li>");
-	});
+	function queryBeautyByBean(){
+		jsondata.beauty.name = $("#beauty_name").val();
+		if($("#beauty_age").val() != ""){
+			jsondata.beauty.age = $("#beauty_age").val();
+		}
+		else{
+			jsondata.beauty.age = -1;
+		}
+		jsondata.beauty.area = $("#beauty_area").val();
+		loadBeauty(1,"manage");
     }
 	
 	function delBeauty(that){
@@ -111,6 +119,45 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		update(url + "DataAction?action=update&role=beauty", getInfo());
 	}
 	
+	function delPic(id){
+		del(url + "DataAction?action=del&role=bpic",id);
+	}
+	function showPic(p,i){
+		//本地
+		//$("img").attr("src","DownLoadPhoto?filename=" + p);
+		//阿里云
+		$("img").attr("src","uploadFile/images/" + p);
+		$("p").text(i);
+	}
+	
+	function managePic(that){
+		//加载图片列表
+		bid = $(that).parent().attr("id");
+		purl = url + 'DataAction?action=query&role=bpic';
+		jsondata = {};
+		jsondata.id = $(that).parent().attr("id");
+		query(purl,jsondata);
+		$("#fileToUpload").show();
+		$("#bt_upload").show();
+		$("#pic").show();
+		$("#bt_upload").attr("onclick","return ajaxFileUpload(" + bid + ");");
+		if(result.result == "success"){
+			$.each(result.returnlist,function(i,n){
+			$("ul").append("<li><a href='javascript:void(0)' onclick='showPic(\"" + n.path + "\",\"" + n.description + "\")'>" + n.name + "</a> <a href='javascript:void(0)' onclick='delPic(" + n.id + ")' >删除</a></li>");
+			});
+		}
+		else{
+		$("ul").append("<p>该美女暂时没有图片</p>");
+		}
+	}
+	var jsondata ={
+		page:{
+		pagesize:5
+		},
+		beauty:{
+		age:-1
+		}
+	};
 	$(document).ready(function(){
 		
 		//隐藏其它元素
@@ -118,10 +165,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		$("ul").empty();
 		
        	//载入美女列表
-        loadBeauty();
+        loadBeauty(1,"manage");
         $("ul").show();
-		$("li").append("<a class='update' onclick='showUpdate(this)' href='javascript:void(0)'>修改</a>&nbsp<a class='del' href='javascript:void(0)' onclick='delBeauty(this)'>删除</a>");
-		                 					
+		$("#page").show();                					
 		$("a#add").click(function(){
 			//隐藏其它元素，显示添加页面
 			$("#container").children().hide();
@@ -140,12 +186,17 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   <a href="admin/adminIndex.jsp">返回管理首页</a>
   <a href="Action?action=logout">退出管理</a><br/>
       美女名称<input id="beauty_name" type="text"/>
-  <input type="submit" id="query" value="查找" onclick="queryBeauty()" /><hr/>
+      美女年龄<input id="beauty_age" type="text"/>
+      美女地区<input id="beauty_area" type="text"/>
+  <input type="submit" id="query" value="查找" onclick="queryBeautyByBean()" /><hr/>
   
   <div id='container'>
  
   <ul>
   </ul>
+  
+  <div id='page'>
+  </div>
   
   <div id='inputbeauty'>
   <input style="display:none" id='id' type='text'/><br/>
@@ -155,12 +206,19 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   美女年龄<input id='age' type='text'/><br/>
   美女地区<input id='area' type='text'/><br/>
   美女简介<input id='instruction' type='text'/><br/>
- <input id="fileToUpload" type="file" size="45" name="fileToUpload" class="input">
-<button class="button" onclick="return ajaxFileUpload();">上传</button><br/>
  <input type="submit" id="add_new" value="添加" onclick="addBeauty()"/>
  <input type="submit" id="update_new" value="确定修改" onclick="updateBeauty()"/>
  </div>
  
+ <div id="pic">
+ 图片名<input id="picname" type="text"/><br/>
+ 图片描述<input id="picdes" type="text"/><br/>
+ </div>
+ <input id="fileToUpload" type="file" size="45" name="fileToUpload" class="input">
+<button id="bt_upload" class="button" onclick="return ajaxFileUpload();">添加</button>
+ 
   </div>
+  <img/>
+  <p></p>
   </body>
 </html>

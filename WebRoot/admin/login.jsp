@@ -21,9 +21,12 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	<script>
 	url = "<%=basePath%>Action";
 	$(document).ready(function(){
-		var lurl = url + "?action=login";
+		$("img").attr("src","safecode?"+Math.random());
+		$("#pwd").attr("value","");
+		$("#safecodeText").attr("value","");
 		var jsondata={};
 		$("#login").click(function(){
+			var lurl = url + "?action=login&safecode="+$("#safecodeText").val();
 			jsondata.username=$("#user").val();
 			jsondata.password=$("#pwd").val();
 			result = postAjax(lurl,jsondata);
@@ -31,20 +34,22 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				window.location="admin/adminIndex.jsp";
 			}
 			else{
-				alert("登录失败！");
-				$("#user").attr("value","");
-				$("#pwd").attr("value","");
+				alert("登录失败！"+result.error);
+				history.go(0);
 			}
 		});
-		//var result = postAjax(lurl,);
+		$("a").click(function(){
+			$(this).children().attr("src","safecode?"+Math.random());	
+		});
 	});
 	</script>
   </head>
   
   <body>
-      <h1>登录美女档案管理系统V3.0</h1>
+      <h1>登录美女档案管理系统V5.0</h1>
   用户名<input value="" id="user" type="text"/><br/>
   密&nbsp&nbsp&nbsp码<input value="" id="pwd" type="password"/><br/>
+ 验证码<input value="" id="safecodeText" type="text"/><a href="javascript:void(0)"><img alt="验证码" src=""></a><br/>
  <input id="login" type="submit" value="登录"></input>
   </body>
 </html>

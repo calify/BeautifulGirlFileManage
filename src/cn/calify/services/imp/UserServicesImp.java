@@ -2,6 +2,8 @@ package cn.calify.services.imp;
 
 import java.util.List;
 
+import cn.calify.beans.Page;
+import cn.calify.beans.TemplateJson;
 import cn.calify.beans.User;
 import cn.calify.dao.factory.UserDAOImpFactory;
 import cn.calify.dao.imp.UserDAOImp;
@@ -27,10 +29,6 @@ public class UserServicesImp implements OperationDAOServices {
 
 	public Object doQueryById(int id) {
 		return userdaoimp.doQueryById(id);
-	}
-
-	public List doQueryByName(String name) {
-		return userdaoimp.doQueryByName(name);
 	}	
 	
 	public boolean doUpdata(Object o) {
@@ -39,5 +37,7 @@ public class UserServicesImp implements OperationDAOServices {
 	public String doLogin(User user){
 		return userdaoimp.doLogin(user);
 	}
-
+	public TemplateJson doQueryByBean(Object o,Page page){
+		return userdaoimp.doQueryByBean(o, page);
+	}
 }

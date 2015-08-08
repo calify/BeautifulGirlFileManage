@@ -55,19 +55,29 @@ public class Action extends HttpServlet {
 		if(action.equals("login")){
 			UserServicesImp userservicesimp = UserServicesImpFactory.generaterUserServicesImp();
 			User user = null;
-			try {
-				JSONObject loginjson = JSONObject.fromObject(GetJsonStringFromRequest.getJsonString(request));
-				user = (User)JSONObject.toBean(loginjson,User.class);
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-			
-			//新建session
+			String safecode = request.getParameter("safecode");
+			//获取session
 			HttpSession hs = request.getSession();
-			hs.setAttribute("role",userservicesimp.doLogin(user));
-			
-			if(hs.getAttribute("role") != null){
-				returnjson.setResult("success");
+			if(hs.getAttribute("safecode").equals(safecode)){
+				try {
+					JSONObject loginjson = JSONObject.fromObject(GetJsonStringFromRequest.getJsonString(request));
+					user = (User)JSONObject.toBean(loginjson,User.class);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+				
+				//新建session
+				hs.setAttribute("role",userservicesimp.doLogin(user));
+				
+				if(hs.getAttribute("role") != null){
+					returnjson.setResult("success");
+				}
+				else{
+					returnjson.setError("用户名或密码错误！");
+				}
+			}
+			else{
+				returnjson.setError("验证码错误！");
 			}
 		}
 		
@@ -79,7 +89,6 @@ public class Action extends HttpServlet {
 				returnjson.setResult("success");
 			}
 		}
-		
 		else if(action.equals("showUser")){
 			List<User> list = UserServicesImpFactory.generaterUserServicesImp().doQueryALL();
 			if(list != null){

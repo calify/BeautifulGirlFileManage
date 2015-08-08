@@ -22,8 +22,16 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	
 	<script>
 	url = "<%=basePath%>";
-	$(document).ready(function(){
-		loadBeauty();
+	var jsondata ={
+		page:{
+		pagesize:5
+		},
+		beauty:{
+		age:-1
+		}
+	};
+	$(document).ready(function(){	
+		loadBeauty(1,"index");
 	});
 	</script>
 	
@@ -33,6 +41,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   <p>点击名字可以查看详细内容</p>
   <ul>
   </ul>
+  <div id='page'>
+  </div>
   <a href="admin/login.jsp">登录管理系统</a>
   </body>
 </html>
